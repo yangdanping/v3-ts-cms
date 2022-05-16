@@ -1,0 +1,13 @@
+// 自定义重置
+body {
+  padding: 0;
+  margin: 0;
+}
+
+// 让其占据整个屏幕
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
