@@ -1,18 +1,18 @@
 <template>
   <div class="login-account">
-    <el-form ref="loginForm" :model="account" :rules="rules">
+    <el-form ref="accountFormRef" :model="account" :rules="rules">
       <el-form-item label="账号" prop="name">
-        <el-input v-model.trim="account.name" clearable />
+        <el-input v-model.trim="account.name" :autofocus="!account.name" @keyup.enter="focusNext('password')" clearable />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model.trim="account.password" show-password clearable />
+        <el-input v-model.trim="account.password" :autofocus="!account.password" @keyup.enter="loginAction(isKeep)" show-password clearable ref="passwordRef" />
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElForm } from 'element-plus';
+import { ElForm, ElInput } from 'element-plus';
 import { ref, reactive } from 'vue';
 import { useStore } from 'vuex';
 
@@ -25,13 +25,19 @@ const account = reactive({
   name: LocalCache.getCache('name') ?? '',
   password: LocalCache.getCache('password') ?? ''
 });
-const loginForm = ref<InstanceType<typeof ElForm>>(); //获取组件进行验证
+
+const accountFormRef = ref<InstanceType<typeof ElForm>>(); //获取组件进行验证
+const passwordRef = ref<InstanceType<typeof ElInput>>(); //获取组件进行验证
+
+const isKeep = ref(false); //是否记住密码判断(作用于密码框回车时)
+isKeep.value = LocalCache.getCache('isKeepPassword') ?? false; //若本地缓存有则直接使用
 
 // loginAction通过defineExpose暴露给父组件并在父组件LoginPanel中调用
 // 以保证登录逻辑在LoginAccount中
 const loginAction = (isKeepPassword: boolean) => {
-  loginForm.value?.validate((valid) => {
+  accountFormRef.value?.validate((valid) => {
     if (valid) {
+      isKeep.value = isKeepPassword;
       // 若验证通过即可判断一下逻辑
       // 1.是否需要记住密码(记住则本地缓存)
       LocalCache.setCache('name', account.name);
@@ -44,6 +50,11 @@ const loginAction = (isKeepPassword: boolean) => {
   });
 };
 defineExpose({ loginAction });
+
+const focusNext = (nextRef: any) => {
+  passwordRef.value?.focus();
+  console.log(nextRef);
+};
 </script>
 
 <style lang="scss" scoped></style>

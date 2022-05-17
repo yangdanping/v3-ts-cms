@@ -13,7 +13,7 @@
     </el-tabs>
 
     <div class="account-control">
-      <el-checkbox v-model="isKeepPassword">记住密码</el-checkbox>
+      <el-checkbox v-model="isKeepPassword" @change="changeKeep">记住密码</el-checkbox>
       <el-link type="primary">忘记密码</el-link>
     </div>
     <el-button @click="handleLoginClick" type="primary" size="large" class="login-btn">登录</el-button>
@@ -25,9 +25,11 @@ import { ref } from 'vue';
 import Icon from '@/components/Icon.vue';
 import LoginAccount from './LoginAccount.vue';
 import LoginPhone from './LoginPhone.vue';
+import { LocalCache } from '@/utils';
 
 const currentTab = ref('account');
 const isKeepPassword = ref(false);
+isKeepPassword.value = LocalCache.getCache('isKeepPassword') ?? false; //若本地缓存有则直接使用
 /* 如何获取LoginAccount组件实例的类型???技巧如下-------------------------------------
 现在在TS环境下ref()可接收一个泛型类型(不写则默认为any)
 InstanceType<typeof LoginAccount> --> 获取到LoginAccount组件实例的类型,即能.value使用它内部的属性/方法了 */
@@ -42,6 +44,10 @@ const handleLoginClick = () => {
     // 手机登录,调用LoginPhone组件的loginAction
     console.log('手机登录,调用LoginPhone组件的loginAction');
   }
+};
+
+const changeKeep = () => {
+  LocalCache.setCache('isKeepPassword', isKeepPassword.value);
 };
 </script>
 

@@ -27,10 +27,7 @@ router.beforeEach((to, from) => {
   // 当路由不在登录页,就通过token判断是否已登录
   if (to.path !== '/login') {
     const token = LocalCache.getCache('token');
-    if (token) {
-      console.log('已登录');
-      return '/main';
-    } else {
+    if (!token) {
       console.log('未登录');
       return '/login';
     }
