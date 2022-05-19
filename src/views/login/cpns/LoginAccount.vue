@@ -52,8 +52,11 @@ const loginAction = (isKeepPassword: boolean) => {
 defineExpose({ loginAction });
 
 const focusNext = (nextRef: any) => {
-  passwordRef.value?.focus();
-  console.log(nextRef);
+  if (!account.password) {
+    passwordRef.value?.focus();
+  } else {
+    loginAction(isKeep.value);
+  }
 };
 </script>
 

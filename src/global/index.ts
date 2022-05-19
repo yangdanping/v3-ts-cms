@@ -4,8 +4,8 @@ import store, { setupStore } from '@/store';
 
 export default function init(this: App): void {
   // 1.使用vue-router
-  this.use(router);
   setupStore(); // 初始化数据
+  this.use(router);
   // 2.使用vuex
   this.use(store);
 

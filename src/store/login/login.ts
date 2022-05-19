@@ -4,7 +4,7 @@ import { LocalCache } from '@/utils';
 import type { Module } from 'vuex';
 import type { IRootState } from '../types';
 import type { ILoginState } from './types';
-
+import mapMenusToRoutes from '@/utils/mapMenus';
 // Module类型要求传入两个泛型类型
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -25,6 +25,11 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any[]) {
       state.userMenus = userMenus;
+      // 1.将userMenus映射到routes
+      const routes = mapMenusToRoutes(userMenus);
+      console.log('根据userMenus映射出的路由结果', routes);
+      // 2.将该角色的routes通过router.addRoute动态添加到router.main.children,第一个参数是我们顶层路由里定义的name
+      routes.forEach((route) => router.addRoute('main', route));
     }
   },
   actions: {

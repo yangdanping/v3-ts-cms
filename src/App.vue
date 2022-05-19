@@ -4,13 +4,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-const toLogin = () => router.push({ path: '/login' });
-const toMain = () => router.push({ path: '/main' });
-</script>
+<script lang="ts" setup></script>
 
 <style lang="scss">
 .app {
