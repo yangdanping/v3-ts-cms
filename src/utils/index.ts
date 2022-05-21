@@ -1,3 +1,4 @@
 import LocalCache from './LocalCache';
+import mapMenusToRoutes, { pathMapToMenu } from './mapMenus';
 
-export { LocalCache };
+export { LocalCache, mapMenusToRoutes, pathMapToMenu };

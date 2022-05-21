@@ -5,7 +5,14 @@
       <span class="title">Vue3+TS</span>
     </div>
     <!-- 根据userMenus动态生成菜单(default-active是当前激活菜单的index,决定了显示哪个菜单项,所以要改成动态的) -->
-    <el-menu :collapse="isCollapse" default-active="2" :unique-opened="true" background-color="#333" :text-color="isCollapse ? '' : '#fff'" active-text-color="#43bf88">
+    <el-menu
+      :default-active="activeValue"
+      :collapse="isCollapse"
+      :unique-opened="true"
+      background-color="#1e1e1e"
+      :text-color="isCollapse ? '' : '#fff'"
+      active-text-color="#43bf88"
+    >
       <template v-for="item in userMenus" :key="item.id">
         <!-- 二级菜单 -->
         <template v-if="item.type === 1">
@@ -20,24 +27,30 @@
           </el-sub-menu>
         </template>
         <!-- 一级菜单(该项目没有) -->
-        <!-- <template v-else-if="item.type === 2">
+        <template v-else-if="item.type === 2">
           <el-menu-item :index="item.id + ''">
             <template #title><Icon :name="item.type ?? ''" :label="item.name" /></template>
           </el-menu-item>
-        </template> -->
+        </template>
       </template>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from '@/store';
 import Icon from '@/components/Icon.vue';
+import { pathMapToMenu } from '@/utils';
 const router = useRouter();
-const route = useRoute();
+const route = useRoute(); // 当前路由
 const store = useStore();
+const currentPath = route.path; // 拿到当前活跃的路径
+
+const userMenus = computed(() => store.state.login.userMenus);
+const activeMenu = pathMapToMenu(userMenus.value, currentPath);
+const activeValue = ref(activeMenu.id + '');
 
 const props = defineProps({
   isCollapse: {
@@ -49,11 +62,11 @@ const props = defineProps({
 const handleItemClick = (item: any) => {
   router.push({ path: item.url ?? '/not-found' });
 };
-
-const userMenus = computed(() => store.state.login.userMenus);
 </script>
 
 <style lang="scss" scoped>
+$menuTextColor: #fff;
+
 .nav-menu {
   height: 100%;
   .logo {
@@ -69,7 +82,7 @@ const userMenus = computed(() => store.state.login.userMenus);
     .title {
       font-size: 16px;
       font-weight: 700;
-      color: #fff;
+      color: $menuTextColor;
     }
     &.move-to-left {
       padding-left: 8px;
@@ -82,24 +95,26 @@ const userMenus = computed(() => store.state.login.userMenus);
       text-shadow: 0 0 20px #fff;
     }
     .el-menu-item {
+      background-color: #333;
+
       &:hover {
         text-shadow: 0 0 20px #fff;
       }
       &.is-active {
-        color: #fff;
+        color: $menuTextColor;
         background-color: #43bf88;
       }
     }
     &.el-menu--collapse {
       :deep(.el-sub-menu:not(.is-active)) i {
-        color: #fff;
+        color: $menuTextColor;
       }
     }
   }
 }
 .el-menu--popup {
   .el-menu-item:not(.is-active) span {
-    color: #fff;
+    color: $menuTextColor;
   }
 }
 </style>

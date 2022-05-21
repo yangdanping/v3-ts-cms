@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 import { LocalCache } from '@/utils';
+import { firstMenu } from '@/utils/mapMenus';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -48,6 +49,10 @@ router.beforeEach((to, from) => {
       console.log('未登录');
       return '/login';
     }
+  }
+  // 当来到/main时,重定向到我们映射的第一个菜单的路由上
+  if (to.path === '/main') {
+    return firstMenu.url;
   }
 });
 

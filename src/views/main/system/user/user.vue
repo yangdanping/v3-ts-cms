@@ -1,19 +1,13 @@
 <template>
   <div class="user">
-    <h2>user</h2>
-    <div class="box">box1</div>
-    <div class="box">box2</div>
-    <div class="box">box3</div>
-    <div class="box">box4</div>
-    <div class="box">box5</div>
-    <div class="box">box6</div>
-    <div class="box">box7</div>
-    <div class="box">box8</div>
-    <div class="box">box9</div>
-    <div class="box">box10</div>
+    <MyForm v-bind="formConfig" />
+    <div class="content"></div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import MyForm from '@/base-ui/form';
+import { formConfig } from './config/search.config';
+</script>
 
 <style lang="scss" scoped></style>

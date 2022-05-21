@@ -1,7 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-// let firstMenu: any = null; //用于获取到第一个menu对象,然后到路由导航守卫将重定向的/main再重定向到第一个menu对象url
+let firstMenu: any = null; //用于获取到第一个menu对象,然后到路由导航守卫将重定向的/main再重定向到第一个menu对象url
 
+/**
+ * 通过默认菜单与用户菜单(登录用户所拥有访问权菜单)映射成在最终显示的菜单
+ * @param userMenus 用户菜单
+ * @returns 该用户最终显示的菜单
+ */
 export default function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []; //最后被映射好的数组
 
@@ -28,6 +33,9 @@ export default function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
         recurseGetRoute(menu.children);
       } else if (menu.type === 2) {
         const targetRoute = allRoutes.find((route) => route.path === menu.url); //find只会找到并返回一个
+        if (!firstMenu) {
+          firstMenu = menu; //在映射时保留第一个菜单
+        }
         targetRoute && routes.push(targetRoute);
       }
     });
@@ -35,3 +43,27 @@ export default function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   recurseGetRoute(userMenus);
   return routes;
 }
+
+/**
+ * 通过映射实现点击记住菜单选项
+ * @param userMenus 用户菜单
+ * @param currentPath 当前路由
+ * @returns 当前路由对应的菜单对象
+ */
+// 原来的思路 --> 点击菜单调用事件来获取id,但如何保存是个问题,所以想到获取当前路由与userMenus匹配的方法
+export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+  // 有return要用for..of
+  for (const menu of userMenus) {
+    if (menu.type === 1) {
+      const findMenu = pathMapToMenu(menu.children ?? [], currentPath);
+      if (findMenu) {
+        return findMenu;
+      }
+    } else if (menu.type === 2 && menu.url === currentPath) {
+      console.log('当前路由', currentPath, '对应的菜单对象', { ...menu });
+      return menu;
+    }
+  }
+}
+
+export { firstMenu };

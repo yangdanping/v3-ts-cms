@@ -1,21 +1,31 @@
 <template>
   <div class="main">
     <el-container class="main-content">
-      <el-aside :width="!isMenuCollapse ? '210px' : '60px'"><NavMenu :isCollapse="isMenuCollapse" /></el-aside>
+      <el-aside :width="asideWidth">
+        <NavMenu :isCollapse="isMenuCollapse" />
+      </el-aside>
       <el-container class="page">
-        <el-header class="page-header"><NavHeader @collapseChange="handleCollapseChange" /></el-header>
-        <el-main class="page-content"><router-view></router-view></el-main>
+        <el-header class="page-header">
+          <NavHeader @collapseChange="handleCollapseChange" />
+        </el-header>
+        <el-main class="page-content">
+          <div class="page-info">
+            <router-view></router-view>
+          </div>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import NavMenu from '@/components/nav-menu/NavMenu.vue';
 import NavHeader from '@/components/nav-header/NavHeader.vue';
+import type { IFormItem } from '@/base-ui/form';
 
 const isMenuCollapse = ref(false);
+const asideWidth = computed(() => (!isMenuCollapse.value ? '210px' : '60px'));
 const handleCollapseChange = (isCollapse: boolean) => {
   isMenuCollapse.value = isCollapse;
 };
@@ -34,6 +44,10 @@ $headerHeight: 48px; //header高度
   .page {
     height: 100%;
   }
+  .page-header {
+    background: #333;
+    color: #fff;
+  }
 
   .el-header {
     height: $headerHeight !important;
@@ -41,7 +55,7 @@ $headerHeight: 48px; //header高度
   .el-aside {
     line-height: 200px;
     text-align: left;
-    background-color: #181818;
+    background-color: #1e1e1e;
     transition: width 0.3s; //折叠动作平滑效果
     overflow-x: hidden;
     overflow-y: auto;
@@ -70,10 +84,11 @@ $headerHeight: 48px; //header高度
   .page {
     .page-content {
       height: calc(100% - $headerHeight);
-      // .page-info {
-      //   background-color: #fff;
-      //   border-radius: 8px;
-      // }
+      .page-info {
+        background-color: #fff;
+        border-radius: 8px;
+        min-width: 500px;
+      }
     }
   }
 }
