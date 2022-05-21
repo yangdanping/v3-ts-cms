@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive, onMounted } from 'vue';
+import { ref, computed, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from '@/store';
 import Icon from '@/components/Icon.vue';
