@@ -4,9 +4,7 @@
 /node_modules/**
 ./src/global/*
 
-
 **/*.svg
 **/*.sh
-**/global/register-element-plus.ts
 
 /public/*

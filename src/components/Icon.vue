@@ -8,6 +8,8 @@
         <Expand v-else-if="name === 'expand'" />
         <Fold v-else-if="name === 'fold'" />
         <ArrowDown v-else-if="name === 'arrow-down'" />
+        <CircleCheckFilled v-else-if="name === 'circle-check-filled'" />
+        <RemoveFilled v-else-if="name === 'remove-filled'" />
       </el-icon>
       <span v-if="label && labelSide === 'right'" class="right">{{ label }}</span>
     </span>
@@ -27,8 +29,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { User, Iphone, Monitor, Goods, Setting, ChatLineRound, Expand, Fold, ArrowDown } from '@element-plus/icons-vue';
-
+import { User, Iphone, Monitor, Goods, Setting, ChatLineRound, Expand, Fold, ArrowDown, CircleCheckFilled, RemoveFilled } from '@element-plus/icons-vue';
 const props = defineProps({
   name: {
     type: String,

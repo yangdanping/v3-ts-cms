@@ -20,9 +20,8 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import NavMenu from '@/components/nav-menu/NavMenu.vue';
-import NavHeader from '@/components/nav-header/NavHeader.vue';
-import type { IFormItem } from '@/base-ui/form';
+import NavMenu from '@/components/nav-menu';
+import NavHeader from '@/components/nav-header';
 
 const isMenuCollapse = ref(false);
 const asideWidth = computed(() => (!isMenuCollapse.value ? '210px' : '60px'));
@@ -87,6 +86,7 @@ $headerHeight: 48px; //header高度
       .page-info {
         background-color: #fff;
         border-radius: 8px;
+        overflow: hidden;
         min-width: 500px;
       }
     }

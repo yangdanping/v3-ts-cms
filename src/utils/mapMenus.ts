@@ -1,3 +1,4 @@
+import { IBreadcrumb } from '@/base-ui/breadcrumb';
 import type { RouteRecordRaw } from 'vue-router';
 
 let firstMenu: any = null; //用于获取到第一个menu对象,然后到路由导航守卫将重定向的/main再重定向到第一个menu对象url
@@ -51,19 +52,35 @@ export default function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
  * @returns 当前路由对应的菜单对象
  */
 // 原来的思路 --> 点击菜单调用事件来获取id,但如何保存是个问题,所以想到获取当前路由与userMenus匹配的方法
-export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+export function pathMapToMenu(userMenus: any[], currentPath: string, breadcrumbs?: IBreadcrumb[]): any {
   // 有return要用for..of
   for (const menu of userMenus) {
     if (menu.type === 1) {
       const findMenu = pathMapToMenu(menu.children ?? [], currentPath);
       if (findMenu) {
-        return findMenu;
+        // 找到一级菜单则顺便实现面包屑
+        breadcrumbs?.push({ name: menu.name });
+        breadcrumbs?.push({ name: findMenu.name });
+        console.log('当前路由', currentPath, '对应的菜单对象', { ...findMenu });
+        return findMenu; // 最终在这里返回子菜单
       }
     } else if (menu.type === 2 && menu.url === currentPath) {
-      console.log('当前路由', currentPath, '对应的菜单对象', { ...menu });
       return menu;
     }
   }
+  return breadcrumbs; //在传入第三个参数时,说明要得到面包屑
 }
 
 export { firstMenu };
+
+/**
+ * 实现面包屑 在pathMapToMenu的基础上找到一级菜单和其父级菜单,push进数组即可
+ * @param userMenus 用户菜单
+ * @param currentPath 当前路由
+ * @returns 当前菜单对应的面包屑
+ */
+export function pathMapBreadcrumbs(userMenus: any[], currentPath: string): any {
+  const breadcrumbs: IBreadcrumb[] = [];
+  pathMapToMenu(userMenus, currentPath, breadcrumbs);
+  return breadcrumbs;
+}

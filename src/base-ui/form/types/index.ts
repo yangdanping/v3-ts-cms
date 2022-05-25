@@ -1,6 +1,7 @@
 type FormType = 'input' | 'password' | 'select' | 'datepicker';
 
 export interface IFormItem {
+  field: string;
   type: FormType;
   // IFormItem如何定义具体要看element-plus官网,看你要的那个表单组件具体有什么属性
   label: string;

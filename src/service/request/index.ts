@@ -87,7 +87,7 @@ class MyRequest {
   // 封装request等请求 --> (要在内部做单个请求的拦截器,所以把config:AxiosRequestConfig换成config:MyRequestConfig)
   // 注意!这里改config的类型为MyRequestConfig
   // 返回Promise,在调用时可拿到结果,想要结果类型由请求者决定,所以这里用泛型
-  request<T>(config: MyRequestConfig<T>): Promise<T> {
+  request<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       this.showLoading = config.showLoading ?? true; //类型缩小(注意!,为了不影响下一个请求,请求完后(成功/失败)应当设置回初始化值)
 
@@ -120,16 +120,16 @@ class MyRequest {
   }
 
   //get是调用request的,但同时明确请求方式为GET,下面同理
-  get<T>(config: MyRequestConfig<T>): Promise<T> {
+  get<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' });
   }
-  post<T>(config: MyRequestConfig<T>): Promise<T> {
+  post<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' });
   }
-  patch<T>(config: MyRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PACTH' });
   }
-  delete<T>(config: MyRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' });
   }
 }
