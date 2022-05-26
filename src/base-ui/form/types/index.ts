@@ -14,6 +14,6 @@ export interface IFormItem {
 export interface IForm {
   formItems: IFormItem[];
   labelWidth?: string;
-  colLayout: any; //对象类型注意用any来定义
-  itemStyle: any;
+  colLayout?: any; //对象类型注意用any来定义
+  itemStyle?: any;
 }
