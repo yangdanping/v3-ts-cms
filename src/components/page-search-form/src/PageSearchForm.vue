@@ -13,29 +13,40 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, PropType } from 'vue';
+import { ref } from 'vue';
 import { Search, RefreshLeft } from '@element-plus/icons-vue';
 import MyForm from '@/base-ui/form';
 import type { IForm } from '@/base-ui/form';
-defineProps({
-  searchFormConfig: {
-    type: Object as PropType<IForm>,
-    required: true
-  }
-});
-// formData先暂时写死,后面还要配置
-const formData = ref({
-  id: '',
-  name: '',
-  password: '',
-  sport: '',
-  createdTime: ''
-});
+
+const props = defineProps<{
+  searchFormConfig: IForm;
+}>();
+// 双向绑定的属性应该是由配置文件的field来决定
+// 优化一:formData中的属性应当动态来决定
+const formItems = props.searchFormConfig.formItems;
+const formOriginData: any = {};
+for (const item of formItems) {
+  formOriginData[item.field] = '';
+}
+// 此时formOriginData等价于下面,但做到了数据统一
+const formData = ref(formOriginData);
+// const formData = ref({
+//   id: '',
+//   name: '',
+//   password: '',
+//   sport: '',
+//   createdTime: ''
+// });
+const emits = defineEmits(['searchClick', 'resetClick']);
+// 事件发送至 User(它俩的父组件) --> 在User中调用PageContentTable中的getPageData方法
 const search = () => {
-  console.log('search');
+  emits('searchClick', formData.value);
 };
 const reset = () => {
-  console.log('reset');
+  for (const key in formOriginData) {
+    formData.value[`${key}`] = formOriginData[key]; //直接修改对象中的属性,而非直接对对象赋值
+  }
+  emits('resetClick');
 };
 </script>
 

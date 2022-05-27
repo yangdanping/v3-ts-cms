@@ -20,29 +20,30 @@
         </el-table-column>
       </template>
     </el-table>
-  </div>
-  <div class="footer">
-    <slot name="footer">
-      <!-- <el-pagination
-        v-model:currentPage="currentPage4"
-        v-model:page-size="pageSize4"
-        :page-sizes="[100, 200, 300, 400]"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      /> -->
-    </slot>
+    <div class="footer">
+      <slot name="footer">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          v-model:currentPage="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[10, 20, 30]"
+          :total="dataCount"
+          small
+        />
+      </slot>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
+
 withDefaults(
   defineProps<{
     data: any[] | undefined;
+    dataCount: number;
     propList: any[];
     title?: string;
     showIndexColumn?: boolean;
@@ -57,28 +58,38 @@ const emit = defineEmits(['selectionChange']);
 const handleSelectionChange = (value: any) => {
   emit('selectionChange', value);
 };
+const currentPage = ref(1);
+const pageSize = ref(30);
+const handleSizeChange = (value: any) => {
+  console.log('handleSizeChange');
+};
+const handleCurrentChange = (value: any) => {
+  console.log('handleCurrentChange');
+};
 </script>
 
 <style lang="scss" scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 5px;
-  height: 45px;
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-  }
-  .handler {
+.table {
+  .header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 0 5px;
+    height: 45px;
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .handler {
+      align-items: center;
+    }
   }
-}
 
-.footer {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  padding-top: 10px;
+  .footer {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding-top: 10px;
+  }
 }
 </style>

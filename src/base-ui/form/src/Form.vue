@@ -12,7 +12,7 @@
             <el-form-item :label="item.label" :style="itemStyle">
               <template v-if="item.type === 'input' || item.type === 'password'">
                 <el-input
-                  v-model="formData[`${item.field}`]"
+                  v-model.trim="formData[`${item.field}`]"
                   clearable
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password' ? true : false"
@@ -20,7 +20,7 @@
                 />
               </template>
               <template v-else-if="item.type === 'select'">
-                <el-select v-model="formData[`${item.field}`]" :placeholder="item.placeholder" v-bind="item.otherOptions">
+                <el-select v-model="formData[`${item.field}`]" :placeholder="item.placeholder" v-bind="item.otherOptions" clearable>
                   <el-option v-for="option in item.options" :value="option.value" :key="option.value">{{ option.title }}</el-option>
                 </el-select>
               </template>
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, PropType, computed, watch } from 'vue';
+import { ref, PropType, watch } from 'vue';
 import type { IFormItem } from '../types';
 // 所有这些表单的 组件/label宽度/表单组件样式/表单布局都可由外!界!决定!!!!!!右使用者User决定
 const props = defineProps({
@@ -75,8 +75,9 @@ const props = defineProps({
 });
 
 // 为了防止单项数据流规则被破坏,所以自己实现双向绑定
+// v-model一般做简单数据的双向绑定,但对于对象类型
 const emit = defineEmits(['update:modelValue']);
-const formData = ref({ ...props.modelValue }); //拷贝一份,这一份与原来对象没有关系
+const formData = ref({ ...props.modelValue }); //浅拷贝一份,这一份与原来对象没有关系
 watch(formData, (newV) => emit('update:modelValue', newV), { deep: true });
 </script>
 

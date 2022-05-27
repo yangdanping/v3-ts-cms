@@ -2,26 +2,22 @@ import type { IFormItem, IForm } from '@/base-ui/form';
 
 //  定义el-form-item(其v-model属性应当与formItems一一对应,所以增加field字段)
 export const formItems: IFormItem[] = [
-  {
-    field: 'id',
-    type: 'input',
-    label: 'id',
-    placeholder: '请输入用户id'
-  },
+  { field: 'id', type: 'input', label: 'id', placeholder: '请输入id' },
   { field: 'name', type: 'input', label: '用户名', placeholder: '请输入用户名' },
-  { field: 'password', type: 'password', label: '密码', placeholder: '请输入密码' },
+  { field: 'realname', type: 'input', label: '真实姓名', placeholder: '请输入真实姓名' },
+  { field: 'cellphone', type: 'input', label: '电话号码', placeholder: '请输入电话号码' },
   {
-    field: 'sport',
+    field: 'enable',
     type: 'select',
-    label: '喜欢的运动',
-    placeholder: '请选择喜欢的运动',
+    label: '用户状态',
+    placeholder: '请选择用户状态',
     options: [
-      { title: '篮球', value: 'basketball' },
-      { title: '足球', value: 'football' }
+      { title: '启用', value: 1 },
+      { title: '禁用', value: 0 }
     ]
   },
   {
-    field: 'createdTime',
+    field: 'createAt',
     type: 'datepicker',
     label: '创建时间',
     // 专属于datepicker的其他配置

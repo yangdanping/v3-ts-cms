@@ -1,6 +1,6 @@
 <template>
   <div class="page-content-table">
-    <PageTable :data="dataList" @selectionChange="selectionChange" v-bind="contentTableConfig">
+    <PageTable :data="dataList" :dataCount="dataCount" @selectionChange="selectionChange" v-bind="contentTableConfig">
       <!-- 使用作用域插槽(名随便取,一般叫slotProps,然后取到我们插槽上设置的:row) -->
       <!-- 1.header中的插槽 -->
       <template #headerHandler>
@@ -33,15 +33,20 @@ const props = defineProps<{
   pageName: string;
 }>();
 
-store.dispatch('system/getPageListAction', {
-  pageName: props.pageName,
-  queryInfo: {
-    offset: 0,
-    size: 10
-  }
-});
+const getPageData = (queryInfo: any = {}) => {
+  store.dispatch('system/getPageListAction', {
+    pageName: props.pageName,
+    queryInfo: {
+      offset: 0,
+      size: 10,
+      ...queryInfo //queryInfo会根据传入字段进行模糊查询,后端已完成
+    }
+  });
+};
+getPageData();
+defineExpose({ getPageData });
 const dataList = computed(() => store.getters[`system/pageListData`](props.pageName));
-// const userCount = computed(() => store.state.system.userCount);
+const dataCount = computed(() => store.getters[`system/pageListCount`](props.pageName));
 
 const status = computed(() => {
   return (row: any) => ({
