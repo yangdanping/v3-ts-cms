@@ -1,6 +1,7 @@
 import { createStore, Store, useStore as useVuexStore } from 'vuex';
 import loginModule from './login/login';
 import systemModule from './main/system/system';
+import productModule from './main/product/product';
 import type { IRootState, IStoreType } from './types';
 // 指定IRootState类型(模块中是不能加的)
 
@@ -16,6 +17,7 @@ const store = createStore<IRootState>({
   actions: {},
   modules: {
     login: loginModule,
+    product: productModule,
     system: systemModule
   }
 });

@@ -5,7 +5,7 @@ export const formItems: IFormItem[] = [
   { field: 'name', type: 'input', label: '角色名', placeholder: '请输入角色名' },
   { field: 'intro', type: 'input', label: '角色介绍', placeholder: '请输入角色介绍' },
   {
-    field: 'createAt',
+    field: 'createdTime',
     type: 'datepicker',
     label: '创建时间',
     // 专属于datepicker的其他配置

@@ -5,10 +5,11 @@ const propList = [
   { prop: 'realname', label: '真实姓名', minWidth: '100' },
   { prop: 'cellphone', label: '手机号码', minWidth: '100' },
   { prop: 'enable', label: '状态', minWidth: '50', slotName: 'status' }, //slotName用于动态配置插槽名
-  { prop: 'createAt', label: '创建时间', minWidth: '150', slotName: 'createAt' },
-  { prop: 'updateAt', label: '更新时间', minWidth: '150', slotName: 'updateAt' },
+  { prop: 'createAt', label: '创建时间', minWidth: '150' },
+  { prop: 'updateAt', label: '更新时间', minWidth: '150' },
   { label: '操作', minWidth: '120', slotName: 'handler' }
 ];
+
 // 写一个针对userList的配置文件
 export const userContentTableConfig = {
   title,

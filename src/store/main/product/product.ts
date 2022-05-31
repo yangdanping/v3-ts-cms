@@ -1,17 +1,15 @@
 import { Module } from 'vuex';
 import type { IRootState } from '../../types';
-import type { ISystemState } from './types';
+import type { IProductState } from './types';
 import { formatUtcString } from '@/utils';
-import { getPageListData } from '@/service/main/system/system';
+import { getPageListData } from '@/service/main/product/product';
 
-const systemModule: Module<ISystemState, IRootState> = {
+const productModule: Module<IProductState, IRootState> = {
   namespaced: true,
   state() {
     return {
-      usersList: [],
-      usersCount: 0,
-      roleList: [],
-      roleCount: 0
+      goodsList: [],
+      goodsCount: 0
     };
   },
   getters: {
@@ -27,25 +25,15 @@ const systemModule: Module<ISystemState, IRootState> = {
     }
   },
   mutations: {
-    changeUsersList(state, usersList: any[]) {
-      usersList.forEach((user) => {
-        user.createAt = formatUtcString(user?.createAt);
-        user.updateAt = formatUtcString(user?.updateAt);
+    changeGoodsList(state, goodsList: any[]) {
+      goodsList.forEach((good) => {
+        good.createAt = formatUtcString(good?.createAt);
+        good.updateAt = formatUtcString(good?.updateAt);
       });
-      state.usersList = usersList;
+      state.goodsList = goodsList;
     },
-    changeUsersCount(state, usersCount: number) {
-      state.usersCount = usersCount;
-    },
-    changeRoleList(state, roleList: any[]) {
-      roleList.forEach((role) => {
-        role.createAt = formatUtcString(role?.createAt);
-        role.updateAt = formatUtcString(role?.updateAt);
-      });
-      state.roleList = roleList;
-    },
-    changeRoleCount(state, roleCount: number) {
-      state.roleCount = roleCount;
+    changeGoodsCount(state, goodsCount: number) {
+      state.goodsCount = goodsCount;
     }
   },
   actions: {
@@ -66,4 +54,4 @@ const systemModule: Module<ISystemState, IRootState> = {
   }
 };
 
-export default systemModule;
+export default productModule;

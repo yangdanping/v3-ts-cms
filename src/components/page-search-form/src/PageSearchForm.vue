@@ -25,16 +25,13 @@ const props = defineProps<{
 // 优化一:formData中的属性应当动态来决定
 const formItems = props.searchFormConfig.formItems;
 const formOriginData: any = {};
-for (const item of formItems) {
-  formOriginData[item.field] = '';
-}
+formItems.forEach((item) => (formOriginData[item.field] = ''));
 // 此时formOriginData等价于下面,但做到了数据统一
 const formData = ref(formOriginData);
 // const formData = ref({
 //   id: '',
 //   name: '',
 //   password: '',
-//   sport: '',
 //   createdTime: ''
 // });
 const emits = defineEmits(['searchClick', 'resetClick']);

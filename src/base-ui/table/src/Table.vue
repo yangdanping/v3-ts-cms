@@ -10,9 +10,9 @@
     </div>
     <el-table :data="data" @selection-change="handleSelectionChange" border style="width: 100%">
       <el-table-column v-if="showSelectColumn" type="selection" min-width="80" align="center"></el-table-column>
-      <el-table-column v-if="showIndexColumn" type="index" label="序号" min-width="150" align="center">1</el-table-column>
+      <el-table-column v-if="showIndexColumn" type="index" label="序号" min-width="150" align="center"></el-table-column>
       <template v-for="item in propList" :key="item.prop">
-        <el-table-column v-bind="item" align="center">
+        <el-table-column v-bind="item" align="center" show-overflow-tooltip>
           <template #default="scope">
             <!-- 通过作用域插槽将scope.row传到上一层,那边通过slotProps.row得到 -->
             <slot :name="item.slotName" :row="scope.row">{{ scope.row[item.prop] }}</slot>
@@ -24,10 +24,10 @@
       <slot name="footer">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
+          v-model:currentPage="page.currentPage"
           @current-change="handleCurrentChange"
+          v-model:page-size="page.pageSize"
           @size-change="handleSizeChange"
-          v-model:currentPage="currentPage"
-          v-model:page-size="pageSize"
           :page-sizes="[10, 20, 30]"
           :total="dataCount"
           small
@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     data: any[] | undefined;
     dataCount: number;
@@ -48,23 +48,27 @@ withDefaults(
     title?: string;
     showIndexColumn?: boolean;
     showSelectColumn?: boolean;
+    page: any; //分页
   }>(),
   {
     showIndexColumn: false,
-    showSelectColumn: false
+    showSelectColumn: false,
+    page: () => ({ currentPage: 0, pageSize: 10 })
   }
 );
-const emit = defineEmits(['selectionChange']);
+
+const emit = defineEmits(['selectionChange', 'update:page']);
 const handleSelectionChange = (value: any) => {
   emit('selectionChange', value);
 };
-const currentPage = ref(1);
-const pageSize = ref(30);
-const handleSizeChange = (value: any) => {
+
+const handleSizeChange = (pageSize: any) => {
   console.log('handleSizeChange');
+  emit('update:page', { ...props.page, pageSize }); //原值和新值
 };
-const handleCurrentChange = (value: any) => {
+const handleCurrentChange = (currentPage: any) => {
   console.log('handleCurrentChange');
+  emit('update:page', { ...props.page, currentPage });
 };
 </script>
 
