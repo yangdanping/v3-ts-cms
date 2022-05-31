@@ -8,7 +8,7 @@
         </div>
       </slot>
     </div>
-    <el-table :data="data" @selection-change="handleSelectionChange" border style="width: 100%">
+    <el-table :data="data" v-bind="childrenProps" @selection-change="handleSelectionChange" border style="width: 100%">
       <el-table-column v-if="showSelectColumn" type="selection" min-width="80" align="center"></el-table-column>
       <el-table-column v-if="showIndexColumn" type="index" label="序号" min-width="150" align="center"></el-table-column>
       <template v-for="item in propList" :key="item.prop">
@@ -20,7 +20,7 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div v-if="showFooter" class="footer">
       <slot name="footer">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
@@ -38,22 +38,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 const props = withDefaults(
   defineProps<{
+    title?: string;
     data: any[] | undefined;
     dataCount: number;
     propList: any[];
-    title?: string;
     showIndexColumn?: boolean;
     showSelectColumn?: boolean;
     page: any; //分页
+    childrenProps: any; //展开项
+    showFooter: boolean;
   }>(),
   {
     showIndexColumn: false,
     showSelectColumn: false,
-    page: () => ({ currentPage: 0, pageSize: 10 })
+    page: () => ({ currentPage: 0, pageSize: 10 }),
+    childrenProps: {},
+    showFooter: true
   }
 );
 

@@ -11,7 +11,9 @@ const systemModule: Module<ISystemState, IRootState> = {
       usersList: [],
       usersCount: 0,
       roleList: [],
-      roleCount: 0
+      roleCount: 0,
+      menuList: [],
+      menuCount: 0
     };
   },
   getters: {
@@ -46,6 +48,16 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeRoleCount(state, roleCount: number) {
       state.roleCount = roleCount;
+    },
+    changeMenuList(state, menuList: any[]) {
+      menuList.forEach((menu) => {
+        menu.createAt = formatUtcString(menu?.createAt);
+        menu.updateAt = formatUtcString(menu?.updateAt);
+      });
+      state.menuList = menuList;
+    },
+    changeMenuCount(state, menuCount: number) {
+      state.menuCount = menuCount;
     }
   },
   actions: {

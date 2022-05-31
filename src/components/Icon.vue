@@ -10,6 +10,10 @@
         <ArrowDown v-else-if="name === 'arrow-down'" />
         <CircleCheckFilled v-else-if="name === 'circle-check-filled'" />
         <RemoveFilled v-else-if="name === 'remove-filled'" />
+        <Monitor v-if="name === 'el-icon-monitor'" />
+        <Setting v-else-if="name === 'el-icon-setting'" />
+        <Goods v-else-if="name === 'el-icon-goods'" />
+        <ChatLineRound v-else-if="name === 'el-icon-chat-line-round'" />
       </el-icon>
       <span v-if="label && labelSide === 'right'" class="right">{{ label }}</span>
     </span>
