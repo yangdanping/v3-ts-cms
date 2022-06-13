@@ -47,8 +47,8 @@ const props = withDefaults(
     showIndexColumn?: boolean;
     showSelectColumn?: boolean;
     page: any; //分页
-    childrenProps: any; //展开项
-    showFooter: boolean;
+    childrenProps?: any; //展开项
+    showFooter?: boolean;
   }>(),
   {
     showIndexColumn: false,

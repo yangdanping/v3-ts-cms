@@ -5,18 +5,17 @@
       <!-- 使用作用域插槽(名随便取,一般叫slotProps,然后取到我们插槽上设置的:row) -->
       <!-- 1.header中的公共插槽headerHandler -->
       <template #headerHandler>
-        <el-button size="small" type="primary" :icon="CirclePlus">新建用户</el-button>
-        <el-button size="small" :icon="Refresh">刷新</el-button>
+        <el-button @click="handleCreateClick" v-if="isCreate" size="small" type="primary" :icon="CirclePlus">新建用户</el-button>
       </template>
 
       <!-- 2.列中的公共插槽 -->
       <template #status="slotProps">
         <Icon v-bind="status(slotProps.row)" size="23px" />
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div class="handle-btns">
-          <el-button size="small" text :icon="Edit">编辑</el-button>
-          <el-button type="danger" size="small" text :icon="Delete">删除</el-button>
+          <el-button @click="handleEditClick(scope.row)" v-if="isUpdate" size="small" text :icon="Edit">编辑</el-button>
+          <el-button @click="handleDeleteClick(scope.row)" v-if="isDelete" type="danger" size="small" text :icon="Delete">删除</el-button>
         </div>
       </template>
 
@@ -30,16 +29,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useStore } from '@/store';
 import PageTable from '@/base-ui/table';
 import Icon from '@/components/Icon.vue';
-import { CirclePlus, Refresh, Edit, Delete } from '@element-plus/icons-vue';
+import { CirclePlus, Edit, Delete } from '@element-plus/icons-vue';
+import { usePermission } from '@/hooks/usePermission';
 const store = useStore();
 const props = defineProps<{
   contentTableConfig: any;
   pageName: string;
 }>();
+
+// 0.获取操作权限
+const isCreate = usePermission(props.pageName, 'create'); //是否有创建权限
+const isUpdate = usePermission(props.pageName, 'update'); //是否有更新权限
+const isDelete = usePermission(props.pageName, 'delete'); //是否有删除权限
+const isQuery = usePermission(props.pageName, 'query'); //是否有请求权限
 
 let moduleName = 'system';
 if (props.pageName === 'goods') {
@@ -51,6 +57,7 @@ watch(pageInfo, () => getPageData()); //监听分页数据变化
 
 // 2.发送网络请求
 const getPageData = (queryInfo: any = {}) => {
+  if (!isQuery) return; //若无权限则直接return
   const offset = (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize;
   const size = pageInfo.value.pageSize;
   store.dispatch(`${moduleName}/getPageListAction`, {
@@ -65,7 +72,7 @@ const dataList = computed(() => store.getters[`${moduleName}/pageListData`](prop
 const dataCount = computed(() => store.getters[`${moduleName}/pageListCount`](props.pageName));
 const status = computed(() => {
   return (row: any) => {
-    const key = ['enable', 'status'];
+    const key = ['enable', 'status']; // 对应服务器返回的状态属性
     const isTrue = row[key[0]] === 1 || row[key[1]] === 1;
     return {
       name: isTrue ? 'circle-check-filled' : 'remove-filled',
@@ -74,7 +81,7 @@ const status = computed(() => {
   };
 });
 const selectionChange = (value: any) => {
-  console.log('handleSelectionChange in User', value);
+  console.log('handleSelectionChange', value);
 };
 
 // 3.获取其他的动态插槽名称
@@ -85,7 +92,19 @@ const otherPropSlots = props.contentTableConfig.propList.filter((item: any) => {
     return true;
   }
 });
-console.log('otherPropSlots', otherPropSlots);
+
+// 4.监听增删改操作
+const emit = defineEmits(['createClick', 'editClick']);
+
+const handleCreateClick = () => emit('createClick');
+const handleEditClick = (row: any) => emit('editClick', row);
+const handleDeleteClick = (row: any) => {
+  console.log('handleDeleteClick', row);
+  store.dispatch('system/deletePageDataAction', {
+    pageName: props.pageName,
+    id: row.id
+  });
+};
 </script>
 
 <style lang="scss" scoped>

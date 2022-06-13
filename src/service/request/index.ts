@@ -127,7 +127,10 @@ class MyRequest {
     return this.request<T>({ ...config, method: 'POST' });
   }
   patch<T = any>(config: MyRequestConfig<T>): Promise<T> {
-    return this.request<T>({ ...config, method: 'PACTH' });
+    return this.request<T>({ ...config, method: 'PATCH' });
+  }
+  put<T = any>(config: MyRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT' });
   }
   delete<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' });

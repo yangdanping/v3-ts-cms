@@ -8,11 +8,12 @@
       <el-row>
         <!-- 里面的内容由传进来的IFormItem类型的formItems数组决定(事先定义好配置,然后v-for出来),注意!直接v-model="formData[`${item.field}`]"违反单项数据流原则 -->
         <template v-for="item in formItems" :key="item.label">
-          <el-col :span="8" v-bind="colLayout">
-            <el-form-item :label="item.label" :style="itemStyle">
+          <el-col v-bind="colLayout">
+            <el-form-item v-if="!item.isHidden" :label="item.label" :style="itemStyle">
               <template v-if="item.type === 'input' || item.type === 'password'">
                 <el-input
-                  v-model.trim="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                   clearable
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password' ? true : false"
@@ -20,12 +21,19 @@
                 />
               </template>
               <template v-else-if="item.type === 'select'">
-                <el-select v-model="formData[`${item.field}`]" :placeholder="item.placeholder" v-bind="item.otherOptions" clearable>
-                  <el-option v-for="option in item.options" :value="option.value" :key="option.value">{{ option.title }}</el-option>
+                <el-select
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
+                  :placeholder="item.placeholder"
+                  v-bind="item.otherOptions"
+                  clearable
+                >
+                  <el-option v-for="option in item.options" :value="option.value" :key="option.value">{{ option.label }}</el-option>
                 </el-select>
               </template>
               <template v-else-if="item.type === 'datepicker'">
-                <el-date-picker v-model="formData[`${item.field}`]" v-bind="item.otherOptions" />
+                <!-- <el-date-picker v-model="formData[`${item.field}`]" v-bind="item.otherOptions" /> -->
+                <el-date-picker :model-value="modelValue[`${item.field}`]" @update:modelValue="handleValueChange($event, item.field)" v-bind="item.otherOptions" />
               </template>
             </el-form-item>
           </el-col>
@@ -39,9 +47,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, PropType, watch } from 'vue';
+import { PropType, watch } from 'vue';
 import type { IFormItem } from '../types';
 // 所有这些表单的 组件/label宽度/表单组件样式/表单布局都可由外!界!决定!!!!!!右使用者User决定
+
 const props = defineProps({
   formItems: {
     type: Array as PropType<IFormItem[]>, //利用PropType让Array明确为IFormItem[]类型
@@ -77,8 +86,18 @@ const props = defineProps({
 // 为了防止单项数据流规则被破坏,所以自己实现双向绑定
 // v-model一般做简单数据的双向绑定,但对于对象类型
 const emit = defineEmits(['update:modelValue']);
-const formData = ref({ ...props.modelValue }); //浅拷贝一份,这一份与原来对象没有关系
-watch(formData, (newV) => emit('update:modelValue', newV), { deep: true });
+// const formData = ref({ ...props.modelValue }); //浅拷贝一份,这一份与原来对象没有关系
+// watch(formData, (newV) => emit('update:modelValue', newV), { deep: true });
+const handleValueChange = (value: any, field: string) => {
+  emit('update:modelValue', { ...props.modelValue, [field]: value });
+};
+watch(
+  () => props.formItems,
+  (newV) => {
+    console.log('formItems newV', newV);
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss" scoped>

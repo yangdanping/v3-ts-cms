@@ -4,7 +4,7 @@ import { LocalCache } from '@/utils';
 import type { Module } from 'vuex';
 import type { IRootState } from '../types';
 import type { ILoginState } from './types';
-import mapMenusToRoutes from '@/utils/mapMenus';
+import mapMenusToRoutes, { mapMenusToPermssions } from '@/utils/mapMenus';
 // Module类型要求传入两个泛型类型
 const loginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -12,7 +12,8 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     };
   },
   getters: {},
@@ -30,10 +31,14 @@ const loginModule: Module<ILoginState, IRootState> = {
       console.log('根据userMenus映射出的路由结果', routes);
       // 2.将该角色的routes通过router.addRoute动态添加到router.main.children,第一个参数是我们顶层路由里定义的name
       routes.forEach((route) => router.addRoute('main', route));
+      // 3.获取用户的按钮权限
+      const permissions = mapMenusToPermssions(userMenus);
+      state.permissions = permissions;
+      console.log('permissionspermissionspermissions', state.permissions);
     }
   },
   actions: {
-    async accountLoginAction({ commit }, payload) {
+    async accountLoginAction({ commit, dispatch }, payload) {
       // 1.实现登录逻辑
       const accountResult = await accountLoginRequest(payload);
       console.log('拿到登录结果', accountResult);
@@ -41,6 +46,10 @@ const loginModule: Module<ILoginState, IRootState> = {
       // token存放在store和本地缓存中,然后再myRequest请求拦截器中,就能获取本地缓存的token
       commit('changeToken', token);
       LocalCache.setCache('token', token);
+
+      // 发送初始化的请求(完整的role/department)
+      dispatch('getInitDataAction', null, { root: true });
+
       // 2.拿到id请求用户信息
       const userInfoResult = await requestUserInfoById(id);
       const userInfo = userInfoResult.data;
@@ -57,9 +66,12 @@ const loginModule: Module<ILoginState, IRootState> = {
       // 4.跳到首页
       await router.push('/main');
     },
-    async loadLocalLogin({ commit }) {
+    async loadLocalLogin({ commit, dispatch }) {
       const token = LocalCache.getCache('token');
       token && commit('changeToken', token);
+      // 发送初始化的请求(完整的role/department)
+      dispatch('getInitDataAction', null, { root: true });
+
       const userInfo = LocalCache.getCache('userInfo');
       userInfo && commit('changeUserInfo', userInfo);
       const userMenus = LocalCache.getCache('userMenus');

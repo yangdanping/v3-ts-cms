@@ -84,3 +84,27 @@ export function pathMapBreadcrumbs(userMenus: any[], currentPath: string): any {
   pathMapToMenu(userMenus, currentPath, breadcrumbs);
   return breadcrumbs;
 }
+
+/**
+ * 通过菜单获取权限
+ * @param userMenus 用户菜单
+ * @returns 当前用户权限
+ */
+// 用户的按钮权限在后端传入的userMenus中的三级菜单中,所以先在这里取到所有的按钮权限放到数组permissions中
+export function mapMenusToPermssions(userMenus: any[]) {
+  const permissions: string[] = [];
+
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission(menu.children ?? []);
+      } else if (menu.type === 3) {
+        permissions.push(menu.permission);
+      }
+    }
+  };
+
+  _recurseGetPermission(userMenus);
+
+  return permissions;
+}

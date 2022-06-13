@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '@/store';
 import Icon from '../../Icon.vue';

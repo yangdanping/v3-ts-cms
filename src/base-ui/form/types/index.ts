@@ -7,8 +7,9 @@ export interface IFormItem {
   label: string;
   rules?: any[];
   placeholder?: any;
-  options?: any[]; //针对select中的options
+  options?: any[]; // 针对select中的options
   otherOptions?: any; // 针对其他el属性的属性,最好每个都有,因为每个el组件都可能有其他属性(可设为对象,里面放一个个属性,然后v-bind:"item.otherOptions"绑定到el组件上)
+  isHidden?: boolean; // 控制是否隐藏
 }
 
 export interface IForm {
