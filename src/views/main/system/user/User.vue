@@ -8,9 +8,7 @@
       @createClick="handleCreateClick"
       @editClick="handleEditClick"
     ></PageContentTable>
-    <PageModal ref="pageModalRef" pageName="users" :title="dialogTitle" :modalConfig="userModalConfigRef" :defaultInfo="defaultInfo">
-      <el-button>哈哈哈</el-button>
-    </PageModal>
+    <PageModal ref="pageModalRef" pageName="users" :title="dialogTitle" :modalConfig="userModalConfigRef" :defaultInfo="defaultInfo"> </PageModal>
   </div>
 </template>
 
@@ -28,6 +26,7 @@ import { userModalConfig } from './config/modal.config';
 import { usePageSearch } from '@/hooks/usePageSearch';
 import { usePageModel } from '@/hooks/usePageModel';
 import { useStore } from '@/store';
+
 const { pageContentRef, handleSearchClick, handleResetClick } = usePageSearch();
 // pageModal相关的hook逻辑(页面单独的逻辑只放在这个页面中,公共的放在hook中)
 const createCallback = () => {

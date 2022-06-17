@@ -24,10 +24,12 @@ const props = withDefaults(
     title: string;
     modalConfig: IForm;
     defaultInfo: any;
+    otherInfo?: any; //为了让PageModal能处理更多的数据,如el-tree,再增加一个属性用于和defaultInfo整合数据
     pageName: string;
   }>(),
   {
-    defaultInfo: () => ({})
+    defaultInfo: () => ({}),
+    otherInfo: () => ({})
   }
 );
 const dialogVisible = ref(false);
@@ -51,14 +53,15 @@ const handleConfrim = () => {
     // 编辑
     store.dispatch('system/editPageDataAction', {
       pageName: props.pageName,
-      editData: { ...formData.value },
+      // editData: { ...formData.value },
+      editData: { ...formData.value, ...props.otherInfo },
       id: props.defaultInfo.id
     });
   } else {
     // 新建
     store.dispatch('system/createPageDataAction', {
       pageName: props.pageName,
-      newData: { ...formData.value }
+      newData: { ...formData.value, ...props.otherInfo }
     });
   }
 };

@@ -108,3 +108,23 @@ export function mapMenusToPermssions(userMenus: any[]) {
 
   return permissions;
 }
+
+/**
+ * 使角色权限回显至el-tree
+ * @param menuList 用户菜单
+ * @returns 返回叶子结点
+ */
+export function menuMapLeafKeys(menuList: any[]) {
+  const leafKeys: number[] = [];
+  const _recurseGetLeaf = (menuList: any[]) => {
+    for (const menu of menuList) {
+      if (menu.children) {
+        _recurseGetLeaf(menu.children);
+      } else {
+        leafKeys.push(menu.id);
+      }
+    }
+  };
+  _recurseGetLeaf(menuList);
+  return leafKeys;
+}

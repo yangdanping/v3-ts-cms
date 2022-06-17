@@ -2,6 +2,7 @@ import { createStore, Store, useStore as useVuexStore } from 'vuex';
 import loginModule from './login/login';
 import systemModule from './main/system/system';
 import productModule from './main/product/product';
+import dashboardModule from './main/analysis/dashboard';
 import { getPageListData } from '@/service/main/product/product';
 
 import type { IRootState, IStoreType } from './types';
@@ -13,7 +14,8 @@ const store = createStore<IRootState>({
       name: 'ydp',
       age: 24,
       entireDepartment: [],
-      entireRole: []
+      entireRole: [],
+      entireMenu: []
     };
   },
   getters: {},
@@ -25,6 +27,10 @@ const store = createStore<IRootState>({
     changeEntireRole(state, payload) {
       console.log('changeEntireRole');
       state.entireRole = payload;
+    },
+    changeEntireMenu(state, payload) {
+      console.log('changeEntireMenu');
+      state.entireMenu = payload;
     }
   },
   actions: {
@@ -32,14 +38,17 @@ const store = createStore<IRootState>({
       // 1.请求部门和角色数据
       const res1 = await getPageListData('department/list', { offset: 0, size: 1000 });
       const res2 = await getPageListData('role/list', { offset: 0, size: 1000 });
+      const res3 = await getPageListData('menu/list', {});
       commit('changeEntireDepartment', res1.data.list);
       commit('changeEntireRole', res2.data.list);
+      commit('changeEntireMenu', res3.data.list);
     }
   },
   modules: {
     login: loginModule,
     product: productModule,
-    system: systemModule
+    system: systemModule,
+    dashboard: dashboardModule
   }
 });
 
