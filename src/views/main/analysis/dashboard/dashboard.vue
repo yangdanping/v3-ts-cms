@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="10">
         <MyCard title="不同城市商品销量">
-          <!-- <PieEchart :pieData="categoryGoodsCount" /> -->
+          <MapEchart :mapData="addressGoodsSale" />
         </MyCard>
       </el-col>
       <el-col :span="7">
@@ -37,7 +37,7 @@
 import { computed } from 'vue';
 import { useStore } from '@/store';
 import MyCard from '@/base-ui/card';
-import { PieEchart, RoseEchart, LineEchart, BarEchart } from '@/components/page-echarts';
+import { PieEchart, RoseEchart, LineEchart, BarEchart, MapEchart } from '@/components/page-echarts';
 const store = useStore();
 store.dispatch('dashboard/getDashboardDataAction');
 const categoryGoodsCount = computed(() => {
@@ -64,6 +64,10 @@ const categoryGoodsFavor = computed(() => {
     values.push(item.goodsFavor);
   });
   return { xLabels, values };
+});
+
+const addressGoodsSale = computed(() => {
+  return store.state.dashboard.addressGoodsSale.map((item: any) => ({ name: item.address, value: item.count }));
 });
 </script>
 

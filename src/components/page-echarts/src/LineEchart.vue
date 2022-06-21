@@ -11,9 +11,9 @@ import type { EChartsOption } from 'echarts';
 
 const props = withDefaults(
   defineProps<{
+    title?: string;
     xLabels: string[];
     values: any[];
-    title: string;
   }>(),
   {
     title: ''

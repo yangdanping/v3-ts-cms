@@ -1,6 +1,10 @@
 import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
 
+import chinaMapData from '../data/china.json';
+
+echarts.registerMap('china', chinaMapData); //注册中国地图
+
 export default function (el: HTMLElement) {
   // 1.初始化echarts实例(需绑定dom元素)
   const echartInstance = echarts.init(el);
