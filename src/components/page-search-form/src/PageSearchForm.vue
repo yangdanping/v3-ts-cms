@@ -36,9 +36,7 @@ const formData = ref(formOriginData);
 // });
 const emit = defineEmits(['searchClick', 'resetClick']);
 // 事件发送至 User(它俩的父组件) --> 在User中调用PageContentTable中的getPageData方法
-const search = () => {
-  emit('searchClick', formData.value);
-};
+const search = () => emit('searchClick', formData.value);
 const reset = () => {
   // for (const key in formOriginData) {
   //   formData.value[`${key}`] = formOriginData[key]; //直接修改对象中的属性,而非直接对对象赋值

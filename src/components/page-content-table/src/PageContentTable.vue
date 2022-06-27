@@ -5,7 +5,7 @@
       <!-- 使用作用域插槽(名随便取,一般叫slotProps,然后取到我们插槽上设置的:row) -->
       <!-- 1.header中的公共插槽headerHandler -->
       <template #headerHandler>
-        <el-button @click="handleCreateClick" v-if="isCreate" size="small" type="primary" :icon="CirclePlus">新建用户</el-button>
+        <el-button @click="handleCreateClick" v-if="isCreate" size="small" type="primary" :icon="CirclePlus">新建{{ currentPageName }}</el-button>
       </template>
 
       <!-- 2.列中的公共插槽 -->
@@ -35,6 +35,8 @@ import PageTable from '@/base-ui/table';
 import Icon from '@/components/Icon.vue';
 import { CirclePlus, Edit, Delete } from '@element-plus/icons-vue';
 import { usePermission } from '@/hooks/usePermission';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
 const store = useStore();
 const props = defineProps<{
   contentTableConfig: any;
@@ -48,8 +50,28 @@ const isDelete = usePermission(props.pageName, 'delete'); //是否有删除权�
 const isQuery = usePermission(props.pageName, 'query'); //是否有请求权限
 
 let moduleName = 'system';
-if (props.pageName === 'goods') {
+if (props.pageName === 'goods' || props.pageName === 'category') {
   moduleName = 'product';
+}
+let currentPageName = '';
+switch (props.pageName) {
+  case 'users':
+    currentPageName = '用户';
+    break;
+  case 'department':
+    currentPageName = '部门';
+    break;
+  case 'menu':
+    currentPageName = '菜单';
+    break;
+  case 'role':
+    currentPageName = '角色';
+    break;
+  case 'category':
+    currentPageName = '类别';
+    break;
+  default:
+    break;
 }
 // 1.双向绑定pageInfo
 const pageInfo = ref({ currentPage: 1, pageSize: 10 });
@@ -87,7 +109,7 @@ const selectionChange = (value: any) => {
 // 3.获取其他的动态插槽名称
 const otherPropSlots = props.contentTableConfig.propList.filter((item: any) => {
   if (item.slotName) {
-    if (item.slotName === 'status') return false; //公共插槽过滤掉
+    if (item.slotName === 'status') return false; //过滤掉公共插槽
     if (item.slotName === 'handler') return false;
     return true;
   }
@@ -98,12 +120,20 @@ const emit = defineEmits(['createClick', 'editClick']);
 
 const handleCreateClick = () => emit('createClick');
 const handleEditClick = (row: any) => emit('editClick', row);
+
 const handleDeleteClick = (row: any) => {
   console.log('handleDeleteClick', row);
-  store.dispatch('system/deletePageDataAction', {
-    pageName: props.pageName,
-    id: row.id
-  });
+  ElMessageBox.confirm('确认删除?', `删除 ${row.name}`, {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(() => {
+      store.dispatch(`${moduleName}/deletePageDataAction`, { pageName: props.pageName, id: row.id });
+    })
+    .catch(() => {
+      ElMessage({ type: 'info', message: '取消删除' });
+    });
 };
 </script>
 

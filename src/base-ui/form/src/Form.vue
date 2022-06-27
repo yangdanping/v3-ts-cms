@@ -4,7 +4,7 @@
       <slot name="header"></slot>
     </div>
     <!-- el-col的span属性决定的是栅格占据的列数,不传就是 24/24=1,一行只显示一个,若:span="8"则24/8=3,一行只显示三个,这里我们先传8,后期不写死通过配置传 -->
-    <el-form :label-width="labelWidth">
+    <el-form :label-width="labelWidth" @submit.prevent>
       <el-row>
         <!-- 里面的内容由传进来的IFormItem类型的formItems数组决定(事先定义好配置,然后v-for出来),注意!直接v-model="formData[`${item.field}`]"违反单项数据流原则 -->
         <template v-for="item in formItems" :key="item.label">
@@ -14,10 +14,10 @@
                 <el-input
                   :model-value="modelValue[`${item.field}`]"
                   @update:modelValue="handleValueChange($event, item.field)"
-                  clearable
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password' ? true : false"
                   v-bind="item.otherOptions"
+                  clearable
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -85,12 +85,13 @@ const props = defineProps({
 
 // 为了防止单项数据流规则被破坏,所以自己实现双向绑定
 // v-model一般做简单数据的双向绑定,但对于对象类型
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'handleConfrimEnter']);
 // const formData = ref({ ...props.modelValue }); //浅拷贝一份,这一份与原来对象没有关系
 // watch(formData, (newV) => emit('update:modelValue', newV), { deep: true });
 const handleValueChange = (value: any, field: string) => {
   emit('update:modelValue', { ...props.modelValue, [field]: value });
 };
+
 watch(
   () => props.formItems,
   (newV) => {

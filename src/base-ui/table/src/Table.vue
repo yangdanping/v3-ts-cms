@@ -60,18 +60,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(['selectionChange', 'update:page']);
-const handleSelectionChange = (value: any) => {
-  emit('selectionChange', value);
-};
+const handleSelectionChange = (value: any) => emit('selectionChange', value);
 
-const handleSizeChange = (pageSize: any) => {
-  console.log('handleSizeChange');
-  emit('update:page', { ...props.page, pageSize }); //原值和新值
-};
-const handleCurrentChange = (currentPage: any) => {
-  console.log('handleCurrentChange');
-  emit('update:page', { ...props.page, currentPage });
-};
+const handleSizeChange = (pageSize: any) => emit('update:page', { ...props.page, pageSize }); //原值和新值
+const handleCurrentChange = (currentPage: any) => emit('update:page', { ...props.page, currentPage });
 </script>
 
 <style lang="scss" scoped>

@@ -3,6 +3,8 @@ import App from './App.vue';
 import init from '@/global';
 import 'normalize.css';
 import './assets/css/index.scss';
+import 'element-plus/es/components/message/style/css';
+import 'element-plus/es/components/message-box/style/css';
 // import '@/service/axios_demo(演示用)';
 
 const app = createApp(App);

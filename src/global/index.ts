@@ -1,7 +1,6 @@
 import type { App } from 'vue';
 import router from '@/router';
 import store, { setupStore } from '@/store';
-
 export default function init(this: App): void {
   // 1.使用vue-router
   setupStore(); // 初始化数据

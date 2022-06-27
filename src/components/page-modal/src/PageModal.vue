@@ -32,6 +32,11 @@ const props = withDefaults(
     otherInfo: () => ({})
   }
 );
+let moduleName = 'system';
+if (props.pageName === 'goods' || props.pageName === 'category') {
+  moduleName = 'product';
+}
+
 const dialogVisible = ref(false);
 defineExpose({ dialogVisible });
 const formData = ref<any>({});
@@ -51,7 +56,7 @@ const handleConfrim = () => {
   dialogVisible.value = false;
   if (Object.keys(props.defaultInfo).length) {
     // 编辑
-    store.dispatch('system/editPageDataAction', {
+    store.dispatch(`${moduleName}/editPageDataAction`, {
       pageName: props.pageName,
       // editData: { ...formData.value },
       editData: { ...formData.value, ...props.otherInfo },
@@ -59,7 +64,7 @@ const handleConfrim = () => {
     });
   } else {
     // 新建
-    store.dispatch('system/createPageDataAction', {
+    store.dispatch(`${moduleName}/createPageDataAction`, {
       pageName: props.pageName,
       newData: { ...formData.value, ...props.otherInfo }
     });
