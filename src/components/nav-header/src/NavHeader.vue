@@ -5,7 +5,7 @@
       <NavBreadcrumb :breadcrumbs="breadcrumbs" />
       <div class="content-right">
         <div class="box">
-          <el-switch v-model="themeType" active-color="#1e1e1e" inline-prompt :active-icon="Moon" :inactive-icon="Sunny" />
+          <el-switch v-model="themeType" @change="changeTheme" active-color="#1e1e1e" inline-prompt :active-icon="Moon" :inactive-icon="Sunny" />
         </div>
         <UserInfo />
       </div>
@@ -21,10 +21,9 @@ import Icon from '../../Icon.vue';
 import UserInfo from './UserInfo.vue';
 import NavBreadcrumb from '@/base-ui/breadcrumb';
 import { Sunny, Moon } from '@element-plus/icons-vue';
-import { pathMapBreadcrumbs } from '@/utils';
+import { pathMapBreadcrumbs, emitter } from '@/utils';
 const route = useRoute(); // 当前路由
 const store = useStore(); // 当前路由
-
 const themeType = ref(true);
 const isCollapse = ref(false);
 // 由于Main中也要用到,所以不用事件总线来传送
@@ -37,11 +36,13 @@ const handleCollapseClick = () => {
 
 // 获得面包屑 [{name:,path:}]
 const breadcrumbs = computed(() => {
-  const userMenus = store.state.login.userMenus; // 计算属性手机依赖,值变化后会重新计算
+  const userMenus = store.state.login.userMenus; // 计算属性收集依赖,值变化后会重新计算
   const currentPath = route.path;
   return pathMapBreadcrumbs(userMenus, currentPath);
 });
 console.log(breadcrumbs.value);
+
+const changeTheme = () => emitter.emit('changeThemeType', themeType.value);
 </script>
 
 <style lang="scss" scoped>

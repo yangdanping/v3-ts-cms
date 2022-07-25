@@ -25,9 +25,7 @@ import NavHeader from '@/components/nav-header';
 
 const isMenuCollapse = ref(false);
 const asideWidth = computed(() => (!isMenuCollapse.value ? '210px' : '60px'));
-const handleCollapseChange = (isCollapse: boolean) => {
-  isMenuCollapse.value = isCollapse;
-};
+const handleCollapseChange = (isCollapse: boolean) => (isMenuCollapse.value = isCollapse);
 </script>
 
 <style lang="scss" scoped>

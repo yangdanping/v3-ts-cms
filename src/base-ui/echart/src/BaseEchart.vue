@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="base-echart">
     <div class="divRef" ref="echartDivRef" :style="{ width, height }"></div>
   </div>
 </template>

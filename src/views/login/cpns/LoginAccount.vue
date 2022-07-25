@@ -13,11 +13,11 @@
 
 <script lang="ts" setup>
 import { ElForm, ElInput } from 'element-plus';
-import { ref, reactive } from 'vue';
+import { ref, reactive, defineComponent } from 'vue';
 import { useStore } from 'vuex';
-
 import { LocalCache } from '@/utils';
 import { rules } from '../config';
+
 // 1.在Composition API中,必须先调用useStore获取store
 const store = useStore();
 //相关配置文件抽取到config中
