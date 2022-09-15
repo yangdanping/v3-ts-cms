@@ -3,18 +3,18 @@ import type { EChartsOption } from 'echarts';
 
 import chinaMapData from '../data/china.json';
 
-import { emitter } from '@/utils';
+import { emitter, LocalCache } from '@/utils';
 
 echarts.registerMap('china', chinaMapData); //注册中国地图
-let elTheme = '';
 emitter.on('changeThemeType', (theme) => {
-  elTheme = theme ? 'dark' : '';
-  console.log('elTheme', elTheme);
+  console.log('theme', theme);
+  const globalTheme = theme ? 'dark' : '';
+  LocalCache.setCache('theme', globalTheme);
 });
 
 export default function (el: HTMLElement) {
   // 1.初始化echarts实例(需绑定dom元素)
-  const echartInstance = echarts.init(el, elTheme);
+  const echartInstance = echarts.init(el, LocalCache.getCache('theme'));
   // 2.编写配置文件,并且开始绘制(已抽取到外界)
   const setOptions = (options: EChartsOption) => echartInstance.setOption(options);
 

@@ -21,7 +21,7 @@ import Icon from '../../Icon.vue';
 import UserInfo from './UserInfo.vue';
 import NavBreadcrumb from '@/base-ui/breadcrumb';
 import { Sunny, Moon } from '@element-plus/icons-vue';
-import { pathMapBreadcrumbs, emitter } from '@/utils';
+import { pathMapBreadcrumbs, emitter, LocalCache } from '@/utils';
 const route = useRoute(); // 当前路由
 const store = useStore(); // 当前路由
 const themeType = ref(true);
@@ -33,6 +33,8 @@ const handleCollapseClick = () => {
   isCollapse.value = !isCollapse.value;
   emit('collapseChange', isCollapse.value);
 };
+
+themeType.value = LocalCache.getCache('theme') === 'dark' ? true : false;
 
 // 获得面包屑 [{name:,path:}]
 const breadcrumbs = computed(() => {

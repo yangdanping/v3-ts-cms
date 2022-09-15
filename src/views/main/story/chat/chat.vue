@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <div class="chat-box">chat</div>
+    <div class="chat-box"></div>
   </div>
 </template>
 

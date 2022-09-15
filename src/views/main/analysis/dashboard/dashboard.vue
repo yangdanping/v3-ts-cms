@@ -17,7 +17,7 @@
         </MyCard>
       </el-col>
     </el-row>
-    <!-- -- -->
+    <!-- ------------------------------------------ -->
     <el-row :gutter="10" class="content-row">
       <el-col :span="12">
         <MyCard title="分类商品的销量">
@@ -67,7 +67,9 @@ const categoryGoodsFavor = computed(() => {
 });
 
 const addressGoodsSale = computed(() => {
-  return store.state.dashboard.addressGoodsSale.map((item: any) => ({ name: item.address, value: item.count }));
+  const sale = store.state.dashboard.addressGoodsSale.map((item: any) => ({ name: item.address, value: item.count }));
+  console.log('addressGoodsSale----------------------------', sale);
+  return sale;
 });
 </script>
 

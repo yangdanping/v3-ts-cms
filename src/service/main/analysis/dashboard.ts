@@ -13,16 +13,19 @@ export function getCategoryGoodsCount() {
     url: DashboardAPI.categoryGoodsCount
   });
 }
+
 export function getCategoryGoodsSale() {
   return myRequest.get<IDataType>({
     url: DashboardAPI.categoryGoodsSale
   });
 }
+
 export function getCategoryGoodsFavor() {
   return myRequest.get<IDataType>({
     url: DashboardAPI.categoryGoodsFavor
   });
 }
+
 export function getAddressGoodsSale() {
   return myRequest.get<IDataType>({
     url: DashboardAPI.addressGoodsSale

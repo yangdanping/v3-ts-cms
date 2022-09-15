@@ -32,6 +32,7 @@ const props = withDefaults(
     otherInfo: () => ({})
   }
 );
+
 let moduleName = 'system';
 if (props.pageName === 'goods' || props.pageName === 'category') {
   moduleName = 'product';

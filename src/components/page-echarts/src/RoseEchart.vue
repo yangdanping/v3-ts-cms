@@ -23,7 +23,6 @@ const options = computed<EChartsOption>(() => ({
     feature: {
       mark: { show: true },
       dataView: { show: true, readOnly: false },
-
       saveAsImage: { show: true }
     }
   },

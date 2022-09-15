@@ -1,6 +1,8 @@
 import { ref } from 'vue';
 import PageModal from '@/components/page-modal';
+
 type cbFn = (item?: any) => void; // 增加传参,使其回显时能拿到数据
+
 export function usePageModel(title: string, createCallback?: cbFn, editCallback?: cbFn) {
   const pageModalRef = ref<InstanceType<typeof PageModal>>();
   const dialogTitle = ref('');

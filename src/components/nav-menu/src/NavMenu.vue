@@ -2,7 +2,7 @@
   <div class="nav-menu">
     <div class="logo" :class="{ ['move-to-left']: isCollapse }">
       <img src="@/assets/img/logo.svg" alt="logo" />
-      <span class="title">Vue3+TS</span>
+      <span class="title">Daniel-CMS</span>
     </div>
     <!-- 根据userMenus动态生成菜单(default-active是当前激活菜单的index,决定了显示哪个菜单项,所以要改成动态的) -->
     <el-menu

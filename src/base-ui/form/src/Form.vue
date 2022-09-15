@@ -86,7 +86,7 @@ const props = defineProps({
 // 为了防止单项数据流规则被破坏,所以自己实现双向绑定
 // v-model一般做简单数据的双向绑定,但对于对象类型
 const emit = defineEmits(['update:modelValue', 'handleConfrimEnter']);
-// const formData = ref({ ...props.modelValue }); //浅拷贝一份,这一份与原来对象没有关系
+// const formData = ref({ ...props.modelValue }); // 浅拷贝一份,这一份与原来对象没有关系
 // watch(formData, (newV) => emit('update:modelValue', newV), { deep: true });
 const handleValueChange = (value: any, field: string) => {
   emit('update:modelValue', { ...props.modelValue, [field]: value });

@@ -1,5 +1,5 @@
 <template>
-  <div class="rose-echart">
+  <div class="map-echart">
     <BaseEchart :options="options" />
   </div>
 </template>
@@ -48,12 +48,12 @@ const options = computed<EChartsOption>(() => ({
       color: ['rgb(70, 240, 252)', 'rgb(250, 220, 46)', 'rgb(245, 38, 186)']
     },
     textStyle: {
-      color: '#fff'
+      color: '#000'
     }
   },
   geo: {
     map: 'china',
-    roam: 'scale',
+    roam: true,
     emphasis: {
       areaColor: '#f4cccc',
       borderColor: 'rgb(9, 54, 95)',
