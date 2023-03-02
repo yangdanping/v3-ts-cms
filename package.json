@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "prettier": "prettier --write .",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^1.1.4",
     "axios": "^0.27.2",
+    "caniuse-lite": "^1.0.30001451",
     "core-js": "^3.6.5",
     "dayjs": "^1.11.2",
     "echarts": "^5.3.3",
