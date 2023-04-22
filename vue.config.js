@@ -21,7 +21,7 @@ module.exports = {
     proxy: {
       //这里配置好后要在service的config文件中的BASE_URL改为'/api'
       '^/api': {
-        target: 'http://152.136.185.210:5000',
+        target: 'http://123.207.32.32:5000',
         pathRewrite: { '^/api': '' },
         changeOrigin: true
       }
